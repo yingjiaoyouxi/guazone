@@ -315,6 +315,9 @@ body::before{content:'';position:fixed;inset:0;
 
 <div class="toast" id="toast"></div>
 
+<!-- Built-in community data (NGA/Tieba/Bilibili) -->
+<script src="builtin.js"></script>
+
 <script>
 const FN={kuro:'库洛',mhy:'米哈游',hgryph:'鹰角',cross:'跨阵营'};
 const FC={kuro:'var(--kuro)',mhy:'var(--mhy)',hgryph:'var(--hgryph)',cross:'var(--danger)'};
@@ -337,15 +340,24 @@ const BUILTIN_CLASHES = [
 
 async function loadData(){
   const bar=document.getElementById('ustatus');
-  bar.textContent='Loading data...';
+  bar.textContent='Loading...';
+  // Start with built-in community content
+  posts = typeof BUILTIN_POSTS !== 'undefined' ? [...BUILTIN_POSTS] : [];
+  bar.textContent='Loaded '+posts.length+' built-in posts from NGA/Tieba/Bilibili';
   try{
     const r=await fetch('data/posts.json?'+Date.now());
     if(!r.ok)throw new Error(r.status);
     const d=await r.json();
-    posts=d.posts||[];
-    bar.textContent='Updated: '+(d.updated_at||'?')+' | '+posts.length+' items from '+(d.stats?.sources?Object.keys(d.stats.sources).join('/'):'?');
+    if(d.posts&&d.posts.length){
+      // Merge: scraped data takes priority, deduplicate by title
+      const seen=new Set(posts.map(p=>p.title.substring(0,20)));
+      const fresh=d.posts.filter(p=>!seen.has(p.title.substring(0,20)));
+      posts=[...fresh,...posts];
+      const srcs=d.stats?.sources?Object.keys(d.stats.sources).join(', '):'scraped';
+      bar.textContent='Updated: '+(d.updated_at||'?')+' | '+posts.length+' total ('+posts.length-fresh.length+' built-in + '+fresh.length+' '+srcs+')';
+    }
   }catch(e){
-    bar.textContent='Offline mode — using built-in data';
+    bar.textContent='Offline — '+posts.length+' built-in posts (NGA/Tieba/Bilibili community)';
   }
   renderAll();
 }
