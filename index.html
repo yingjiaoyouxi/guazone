@@ -8,466 +8,456 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --kuro:#e63946;--mhy:#7b2ff7;--hgryph:#f9a825;
-  --bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a28;
-  --text:#e8e6e3;--text-dim:#8a8a9a;--border:#2a2a3a;
-  --glow-kuro:0 0 20px rgba(230,57,70,.3);
-  --glow-mhy:0 0 20px rgba(123,47,247,.3);
-  --glow-hgryph:0 0 20px rgba(249,168,37,.3);
+  --kuro:#e63946;--kuro-bg:rgba(230,57,70,.12);
+  --mhy:#7b2ff7;--mhy-bg:rgba(123,47,247,.12);
+  --hgryph:#f9a825;--hgryph-bg:rgba(249,168,37,.12);
+  --bg:#08080e;--surface:#101018;--surface2:#18182a;--surface3:#222238;
+  --text:#eae8e4;--text2:#b0aeb8;--text3:#6a6878;
+  --border:#252538;--border2:#353550;
+  --radius:14px;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(230,57,70,.06),transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(123,47,247,.06),transparent 50%),radial-gradient(ellipse at 50% 80%,rgba(249,168,37,.06),transparent 50%);pointer-events:none;z-index:0}
+body{font-family:'Noto Sans SC',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+
+/* Ambient glow */
+body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 30% 20%,rgba(230,57,70,.04),transparent 40%),
+  radial-gradient(ellipse at 70% 20%,rgba(123,47,247,.04),transparent 40%),
+  radial-gradient(ellipse at 50% 80%,rgba(249,168,37,.03),transparent 40%);
+  pointer-events:none;z-index:0;animation:ambientDrift 20s ease-in-out infinite alternate}
+@keyframes ambientDrift{0%{transform:translate(0,0)}100%{transform:translate(-3%,2%)}}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
 /* HEADER */
-.header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
-.header-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
-.logo-icon{width:36px;height:36px;border-radius:50%;background:conic-gradient(var(--kuro),var(--mhy),var(--hgryph),var(--kuro));display:flex;align-items:center;justify-content:center;font-size:18px}
-.logo-text{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;letter-spacing:2px}
-.logo-sub{font-size:11px;color:var(--text-dim);letter-spacing:1px}
-.nav{display:flex;gap:8px}
-.nav a{padding:8px 16px;border-radius:8px;color:var(--text-dim);text-decoration:none;font-size:14px;font-weight:500;transition:all .2s}
-.nav a:hover,.nav a.active{color:var(--text);background:var(--surface2)}
-.nav-filters{display:flex;gap:6px}
-.filter-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-dim);cursor:pointer;font-size:13px;transition:all .2s;font-family:inherit}
-.filter-btn:hover{border-color:var(--text-dim)}
-.filter-btn.active-kuro{border-color:var(--kuro);color:var(--kuro);background:rgba(230,57,70,.1)}
-.filter-btn.active-mhy{border-color:var(--mhy);color:var(--mhy);background:rgba(123,47,247,.1)}
-.filter-btn.active-hgryph{border-color:var(--hgryph);color:var(--hgryph);background:rgba(249,168,37,.1)}
-.filter-btn.active-all{border-color:var(--text);color:var(--text);background:rgba(255,255,255,.05)}
+.header{position:sticky;top:0;z-index:100;background:rgba(8,8,14,.8);backdrop-filter:blur(24px) saturate(1.2);border-bottom:1px solid var(--border)}
+.header-inner{max-width:1400px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);flex-shrink:0}
+.logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--kuro),var(--mhy),var(--hgryph));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;animation:logoShift 6s ease-in-out infinite}
+@keyframes logoShift{0%,100%{background:linear-gradient(135deg,var(--kuro),var(--mhy),var(--hgryph))}50%{background:linear-gradient(135deg,var(--hgryph),var(--kuro),var(--mhy))}}
+.logo h1{font-family:'Orbitron',sans-serif;font-size:15px;font-weight:900;letter-spacing:2px}
+.logo small{font-size:10px;color:var(--text3);letter-spacing:.5px;display:block;margin-top:-2px}
+
+.header-actions{display:flex;align-items:center;gap:8px}
+.nav-link{padding:6px 14px;border-radius:8px;color:var(--text3);text-decoration:none;font-size:13px;font-weight:500;transition:.2s}
+.nav-link:hover,.nav-link.active{color:var(--text);background:var(--surface2)}
+
+/* Filters */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fbtn{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;font:inherit;font-size:12px;transition:.2s;white-space:nowrap}
+.fbtn:hover{border-color:var(--text2);color:var(--text2)}
+.fbtn.on{color:var(--text);border-color:var(--text);background:rgba(255,255,255,.06)}
+.fbtn[data-f="kuro"].on{color:var(--kuro);border-color:var(--kuro);background:var(--kuro-bg)}
+.fbtn[data-f="mhy"].on{color:var(--mhy);border-color:var(--mhy);background:var(--mhy-bg)}
+.fbtn[data-f="hgryph"].on{color:var(--hgryph);border-color:var(--hgryph);background:var(--hgryph-bg)}
+
+/* UPDATE STATUS */
+.update-bar{max-width:1400px;margin:16px auto 0;padding:0 24px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text3)}
+.update-bar .dot{width:6px;height:6px;border-radius:50%;background:#00e676;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.update-bar .loading{color:var(--hgryph)}
 
 /* HERO */
-.hero{position:relative;padding:60px 24px 40px;text-align:center;overflow:hidden}
-.hero h1{font-family:'Orbitron',sans-serif;font-size:clamp(32px,6vw,56px);font-weight:900;line-height:1.1;margin-bottom:12px}
-.hero h1 span.k{color:var(--kuro)}
-.hero h1 span.m{color:var(--mhy)}
-.hero h1 span.h{color:var(--hgryph)}
-.hero p{color:var(--text-dim);font-size:16px;max-width:600px;margin:0 auto}
-.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e63946;animation:pulse 1.5s infinite;margin-right:6px}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.stats-bar{display:flex;justify-content:center;gap:40px;margin-top:30px}
-.stat{text-align:center}
-.stat-num{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700}
-.stat-num.k{color:var(--kuro)}.stat-num.m{color:var(--mhy)}.stat-num.h{color:var(--hgryph)}
-.stat-label{font-size:12px;color:var(--text-dim);margin-top:4px}
+.hero{max-width:1400px;margin:0 auto;padding:32px 24px 24px;position:relative;z-index:1}
+.hero-headline{font-family:'Orbitron',sans-serif;font-size:clamp(28px,5vw,48px);font-weight:900;line-height:1.1;margin-bottom:8px}
+.hero-headline .k{color:var(--kuro)}.hero-headline .m{color:var(--mhy)}.hero-headline .h{color:var(--hgryph)}
+.hero-sub{color:var(--text3);font-size:14px;max-width:500px}
+.stats-row{display:flex;gap:32px;margin-top:24px;flex-wrap:wrap}
+.stat-box{text-align:center}
+.stat-val{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:700}
+.stat-val.k{color:var(--kuro)}.stat-val.m{color:var(--mhy)}.stat-val.h{color:var(--hgryph)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:2px}
 
-/* WAR ZONE */
-.warzone{max-width:1400px;margin:0 auto;padding:0 24px 40px}
-.section-title{font-size:20px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.section-title::before{content:'';width:4px;height:24px;border-radius:2px;background:linear-gradient(to bottom,var(--kuro),var(--mhy),var(--hgryph))}
-.battle-arena{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch}
-.faction-panel{background:var(--surface);border-radius:16px;padding:24px;border:1px solid var(--border)}
-.faction-panel.kuro{border-top:3px solid var(--kuro)}
-.faction-panel.mhy{border-top:3px solid var(--mhy)}
-.faction-panel.hgryph{border-top:3px solid var(--hgryph)}
-.faction-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.faction-avatar{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900}
-.faction-avatar.k{background:rgba(230,57,70,.15);color:var(--kuro)}
-.faction-avatar.m{background:rgba(123,47,247,.15);color:var(--mhy)}
-.faction-avatar.h{background:rgba(249,168,37,.15);color:var(--hgryph)}
-.faction-name{font-weight:700;font-size:16px}
-.faction-sub{font-size:12px;color:var(--text-dim)}
-.vote-btn{width:100%;padding:10px;border-radius:10px;border:none;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:12px}
-.vote-btn.k{background:rgba(230,57,70,.15);color:var(--kuro);border:1px solid rgba(230,57,70,.3)}
-.vote-btn.k:hover{background:var(--kuro);color:#fff}
-.vote-btn.m{background:rgba(123,47,247,.15);color:var(--mhy);border:1px solid rgba(123,47,247,.3)}
-.vote-btn.m:hover{background:var(--mhy);color:#fff}
-.vote-btn.h{background:rgba(249,168,37,.15);color:var(--hgryph);border:1px solid rgba(249,168,37,.3)}
-.vote-btn.h:hover{background:var(--hgryph);color:#000}
-.vote-bar{height:6px;border-radius:3px;background:var(--surface2);margin-top:8px;overflow:hidden}
-.vote-bar-fill{height:100%;border-radius:3px;transition:width .5s}
-.vote-bar-fill.k{background:var(--kuro)}.vote-bar-fill.m{background:var(--mhy)}.vote-bar-fill.h{background:var(--hgryph)}
+/* SECTION */
+.container{max-width:1400px;margin:0 auto;padding:0 24px 60px;position:relative;z-index:1}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.sec-head h2{font-size:18px;font-weight:700}
+.sec-head::before{content:'';width:3px;height:22px;border-radius:2px;background:linear-gradient(var(--kuro),var(--mhy),var(--hgryph))}
 
-.vs-divider{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;min-width:80px}
-.vs-text{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:900;background:linear-gradient(var(--kuro),var(--mhy),var(--hgryph));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rotate-colors 3s linear infinite}
-@keyframes rotate-colors{0%{filter:hue-rotate(0deg)}100%{filter:hue-rotate(360deg)}}
+/* BATTLE */
+.arena{display:grid;grid-template-columns:1fr 60px 1fr;gap:16px;margin-bottom:16px;align-items:stretch}
+@media(max-width:700px){.arena{grid-template-columns:1fr;gap:12px}}
+.fcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+.fcard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fcard.k::before{background:var(--kuro)}.fcard.m::before{background:var(--mhy)}.fcard.h::before{background:var(--hgryph)}
+.fcard-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.fcard-icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:18px}
+.fcard-icon.k{background:var(--kuro-bg);color:var(--kuro)}
+.fcard-icon.m{background:var(--mhy-bg);color:var(--mhy)}
+.fcard-icon.h{background:var(--hgryph-bg);color:var(--hgryph)}
+.fcard-name{font-weight:700;font-size:15px}
+.fcard-name.k{color:var(--kuro)}.fcard-name.m{color:var(--mhy)}.fcard-name.h{color:var(--hgryph)}
+.fcard-sub{font-size:11px;color:var(--text3)}
+.power{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:700;margin:8px 0}
+.power.k{color:var(--kuro)}.power.m{color:var(--mhy)}.power.h{color:var(--hgryph)}
+.pbar{height:5px;background:var(--surface3);border-radius:3px;margin-top:8px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:3px;transition:width .6s cubic-bezier(.22,1,.36,1)}
+.pbar-fill.k{background:var(--kuro)}.pbar-fill.m{background:var(--mhy)}.pbar-fill.h{background:var(--hgryph)}
+.pct{font-size:11px;color:var(--text3);margin-top:6px}
+.vbtn{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font:inherit;font-size:13px;font-weight:600;cursor:pointer;margin-top:14px;transition:.2s}
+.vbtn:hover{transform:translateY(-1px)}
+.vbtn.k:hover{border-color:var(--kuro);color:var(--kuro);box-shadow:0 0 16px rgba(230,57,70,.2)}
+.vbtn.m:hover{border-color:var(--mhy);color:var(--mhy);box-shadow:0 0 16px rgba(123,47,247,.2)}
+.vbtn.h:hover{border-color:var(--hgryph);color:var(--hgryph);box-shadow:0 0 16px rgba(249,168,37,.2)}
+
+.vs{display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(var(--kuro),var(--mhy),var(--hgryph));-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:colorSpin 4s linear infinite}
+@keyframes colorSpin{to{filter:hue-rotate(360deg)}}
+.vs small{font-size:10px;color:var(--text3);-webkit-text-fill-color:var(--text3);margin-top:8px;font-family:'Noto Sans SC',sans-serif}
 
 /* FEED */
-.feed{max-width:1400px;margin:0 auto;padding:0 24px 60px}
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
-.feed-card{background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden;transition:all .3s;cursor:pointer}
-.feed-card:hover{transform:translateY(-4px);border-color:var(--text-dim)}
-.card-tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.card-tag.kuro{background:rgba(230,57,70,.15);color:var(--kuro)}
-.card-tag.mhy{background:rgba(123,47,247,.15);color:var(--mhy)}
-.card-tag.hgryph{background:rgba(249,168,37,.15);color:var(--hgryph)}
-.card-tag.leak{background:rgba(255,193,7,.15);color:#ffc107}
-.card-tag.battle{background:rgba(255,82,82,.15);color:#ff5252}
-.card-tag.drama{background:rgba(0,230,118,.15);color:#00e676}
-.card-tag.hot{background:rgba(255,87,34,.15);color:#ff5722}
-.card-body{padding:20px}
-.card-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.card-title{font-size:16px;font-weight:700;line-height:1.4}
-.card-excerpt{font-size:13px;color:var(--text-dim);line-height:1.6;margin-bottom:14px}
-.card-meta{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text-dim)}
-.card-meta-left{display:flex;align-items:center;gap:12px}
-.card-meta-item{display:flex;align-items:center;gap:4px}
-.card-img{width:100%;height:180px;object-fit:cover;filter:brightness(.8)}
-.hot-indicator{position:absolute;top:12px;right:12px;background:rgba(255,87,34,.9);color:#fff;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;animation:pulse 1.5s infinite}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:.25s;cursor:pointer}
+.card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.card-body{padding:18px}
+.card-tags{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:600;letter-spacing:.3px}
+.tag.kuro{background:var(--kuro-bg);color:var(--kuro)}
+.tag.mhy{background:var(--mhy-bg);color:var(--mhy)}
+.tag.hgryph{background:var(--hgryph-bg);color:var(--hgryph)}
+.tag.cross{background:rgba(255,82,82,.12);color:#ff5252}
+.tag.leak{background:rgba(255,193,7,.1);color:#ffc107}
+.tag.drama{background:rgba(0,230,118,.1);color:#00e676}
+.tag.battle{background:rgba(255,82,82,.12);color:#ff5252}
+.tag.hot{background:rgba(255,87,34,.1);color:#ff5722}
+.card-title{font-size:15px;font-weight:700;line-height:1.5;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-excerpt{font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-foot{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--text3)}
+.card-foot span{display:flex;align-items:center;gap:3px}
+.card-source{font-size:10px;padding:2px 8px;border-radius:8px;background:var(--surface2)}
 
 /* TRENDING */
-.trending{max-width:1400px;margin:0 auto;padding:0 24px 60px}
-.trending-list{background:var(--surface);border-radius:16px;border:1px solid var(--border);overflow:hidden}
-.trending-item{display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid var(--border);transition:background .2s}
-.trending-item:last-child{border-bottom:none}
-.trending-item:hover{background:var(--surface2)}
-.trending-rank{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;width:32px;text-align:center}
-.trending-rank.top{background:linear-gradient(var(--kuro),var(--mhy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.trending-content{flex:1}
-.trending-title{font-size:14px;font-weight:600;margin-bottom:4px}
-.trending-desc{font-size:12px;color:var(--text-dim)}
-.trending-heat{font-size:12px;font-weight:600;display:flex;align-items:center;gap:4px}
+.tlist{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.titem{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--border);transition:.15s}
+.titem:last-child{border-bottom:none}
+.titem:hover{background:var(--surface2)}
+.trank{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;width:28px;text-align:center;flex-shrink:0}
+.trank.top{background:linear-gradient(var(--kuro),var(--mhy));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tbody{flex:1;min-width:0}
+.ttitle{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmeta{font-size:11px;color:var(--text3);margin-top:2px}
+.theat{font-size:12px;font-weight:600;flex-shrink:0;white-space:nowrap}
 
 /* SUBMIT */
-.submit-section{max-width:1400px;margin:0 auto;padding:0 24px 80px}
-.submit-box{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:32px}
-.submit-box h3{font-size:18px;font-weight:700;margin-bottom:16px}
-.form-row{display:flex;gap:12px;margin-bottom:12px}
-.form-row input,.form-row select,.form-row textarea{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit;font-size:14px;outline:none;transition:border-color .2s}
-.form-row input:focus,.form-row select:focus,.form-row textarea:focus{border-color:var(--mhy)}
-.form-row select{cursor:pointer}
-.form-row textarea{min-height:80px;resize:vertical;width:100%}
-.submit-btn{padding:10px 28px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--kuro),var(--mhy));color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
-.submit-btn:hover{transform:scale(1.02);box-shadow:0 0 20px rgba(123,47,247,.4)}
+.sbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+.sbox h3{font-size:16px;font-weight:700;margin-bottom:14px}
+.srow{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.srow input,.srow select,.srow textarea{flex:1;min-width:200px;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:inherit;font-size:13px;outline:none;transition:.2s}
+.srow textarea{min-height:72px;resize:vertical;width:100%}
+.srow input:focus,.srow select:focus,.srow textarea:focus{border-color:var(--mhy)}
+.sbtn{padding:10px 24px;border-radius:10px;border:none;background:linear-gradient(135deg,var(--kuro),var(--mhy));color:#fff;font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:.2s}
+.sbtn:hover{box-shadow:0 0 24px rgba(123,47,247,.3);transform:translateY(-1px)}
 
 /* FOOTER */
-.footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--text-dim);font-size:12px}
-.footer a{color:var(--text-dim);text-decoration:none}
+.footer{text-align:center;padding:32px 24px;border-top:1px solid var(--border);color:var(--text3);font-size:11px;position:relative;z-index:1}
+.footer a{color:var(--text3)}
 
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 20px;font-size:14px;z-index:999;transform:translateY(100px);opacity:0;transition:all .3s}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:12px 20px;font-size:13px;z-index:999;transform:translateY(80px);opacity:0;transition:.3s}
 .toast.show{transform:translateY(0);opacity:1}
 
-/* RESPONSIVE */
-@media(max-width:900px){
-  .battle-arena{grid-template-columns:1fr;gap:16px}
-  .vs-divider{flex-direction:row;padding:10px}
-  .feed-grid{grid-template-columns:1fr}
-  .nav{display:none}
-  .header-inner{flex-wrap:wrap;height:auto;padding:12px 24px;gap:8px}
-  .stats-bar{flex-wrap:wrap;gap:20px}
-  .form-row{flex-direction:column}
-}
+/* LOADING SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--surface2) 25%,var(--surface3) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ANIMATIONS */
-.fade-in{opacity:0;transform:translateY(20px);transition:all .5s}
-.fade-in.visible{opacity:1;transform:translateY(0)}
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty p{font-size:14px}
+
+@media(max-width:600px){
+  .header-inner{height:auto;flex-wrap:wrap;padding:10px 16px;gap:8px}
+  .header-actions{width:100%;overflow-x:auto}
+  .hero{padding:20px 16px}
+  .stats-row{gap:16px}
+  .container{padding:0 16px 40px}
+  .feed-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
   <div class="header-inner">
     <a class="logo" href="#">
-      <div class="logo-icon">🍉</div>
-      <div>
-        <div class="logo-text">GUA ZONE</div>
-        <div class="logo-sub">三厂风云 · 瓜田守望</div>
-      </div>
+      <div class="logo-mark">G</div>
+      <div><h1>GUA ZONE</h1><small>三厂风云 · 瓜田守望</small></div>
     </a>
-    <nav class="nav">
-      <a href="#feed" class="active">最新爆料</a>
-      <a href="#warzone">阵营对决</a>
-      <a href="#trending">热度榜</a>
-      <a href="#submit">我来爆料</a>
-    </nav>
-    <div class="nav-filters">
-      <button class="filter-btn active-all" onclick="filterCards('all')">全部</button>
-      <button class="filter-btn" data-faction="kuro" onclick="filterCards('kuro')">库洛</button>
-      <button class="filter-btn" data-faction="mhy" onclick="filterCards('mhy')">米哈游</button>
-      <button class="filter-btn" data-faction="hgryph" onclick="filterCards('hgryph')">鹰角</button>
+    <div class="header-actions">
+      <a href="#feed" class="nav-link active">爆料</a>
+      <a href="#warzone" class="nav-link">对决</a>
+      <a href="#trending" class="nav-link">热度</a>
+      <a href="#submit" class="nav-link">投稿</a>
     </div>
   </div>
 </header>
 
-<!-- HERO -->
+<div class="update-bar" id="update-bar">
+  <span class="dot"></span>
+  <span id="update-status">正在加载数据...</span>
+</div>
+
 <section class="hero">
-  <h1><span class="k">战双</span> · <span class="m">原神</span> · <span class="h">明日方舟</span></h1>
-  <p><span class="live-dot"></span>全网最劲爆的三厂游戏社区 · 吃瓜 · 爆料 · 阵营对抗 实时更新中</p>
-  <div class="stats-bar">
-    <div class="stat"><div class="stat-num k" id="stat-kuro">0</div><div class="stat-label">库洛热度</div></div>
-    <div class="stat"><div class="stat-num m" id="stat-mhy">0</div><div class="stat-label">米哈游热度</div></div>
-    <div class="stat"><div class="stat-num h" id="stat-hgryph">0</div><div class="stat-label">鹰角热度</div></div>
-    <div class="stat"><div class="stat-num" style="color:var(--text)" id="stat-total">0</div><div class="stat-label">今日总瓜数</div></div>
+  <div class="hero-headline">
+    <span class="k">战双</span> · <span class="m">原神</span> · <span class="h">明日方舟</span>
+  </div>
+  <p class="hero-sub">全网最劲爆的三厂游戏社区 · 吃瓜爆料 · 阵营对抗 · 实时更新</p>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-val k" id="stat-kuro">0</div><div class="stat-lbl">库洛热度</div></div>
+    <div class="stat-box"><div class="stat-val m" id="stat-mhy">0</div><div class="stat-lbl">米哈游热度</div></div>
+    <div class="stat-box"><div class="stat-val h" id="stat-hgryph">0</div><div class="stat-lbl">鹰角热度</div></div>
+    <div class="stat-box"><div class="stat-val" style="color:var(--text)" id="stat-total">0</div><div class="stat-lbl">今日总瓜数</div></div>
   </div>
 </section>
 
-<!-- BATTLE ZONE -->
-<section id="warzone" class="warzone">
-  <div class="section-title">⚔️ 阵营对决</div>
-  <div class="battle-arena">
-    <div class="faction-panel kuro">
-      <div class="faction-header">
-        <div class="faction-avatar k">K</div>
-        <div><div class="faction-name" style="color:var(--kuro)">库洛游戏</div><div class="faction-sub">战双帕弥什 · 鸣潮</div></div>
-      </div>
-      <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">当前战斗力</div>
-      <div style="font-size:28px;font-weight:900;color:var(--kuro)" id="power-kuro">2,847</div>
-      <div class="vote-bar"><div class="vote-bar-fill k" id="vote-bar-kuro" style="width:38%"></div></div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:6px" id="votes-kuro">38% 支持</div>
-      <button class="vote-btn k" onclick="vote('kuro')">🔥 为库洛投票</button>
+<section id="warzone" class="container">
+  <div class="sec-head"><h2>⚔️ 阵营对决</h2></div>
+  <div class="arena">
+    <div class="fcard k">
+      <div class="fcard-head"><div class="fcard-icon k">K</div><div><div class="fcard-name k">库洛游戏</div><div class="fcard-sub">战双帕弥什 · 鸣潮</div></div></div>
+      <div style="font-size:11px;color:var(--text3)">战斗力</div>
+      <div class="power k" id="pw-k">0</div>
+      <div class="pbar"><div class="pbar-fill k" id="pb-k" style="width:0%"></div></div>
+      <div class="pct" id="pc-k">0%</div>
+      <button class="vbtn k" onclick="vote('kuro')">🔥 为库洛投票</button>
     </div>
-
-    <div class="vs-divider">
-      <div class="vs-text">VS</div>
-      <div style="font-size:11px;color:var(--text-dim);margin-top:8px">第 <span id="round">2,347</span> 轮</div>
-    </div>
-
-    <div class="faction-panel mhy">
-      <div class="faction-header">
-        <div class="faction-avatar m">M</div>
-        <div><div class="faction-name" style="color:var(--mhy)">米哈游</div><div class="faction-sub">原神 · 崩坏 · 绝区零</div></div>
-      </div>
-      <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">当前战斗力</div>
-      <div style="font-size:28px;font-weight:900;color:var(--mhy)" id="power-mhy">4,521</div>
-      <div class="vote-bar"><div class="vote-bar-fill m" id="vote-bar-mhy" style="width:42%"></div></div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:6px" id="votes-mhy">42% 支持</div>
-      <button class="vote-btn m" onclick="vote('mhy')">🔥 为米哈游投票</button>
+    <div class="vs">VS<small>第 <span id="round">1</span> 轮</small></div>
+    <div class="fcard m">
+      <div class="fcard-head"><div class="fcard-icon m">M</div><div><div class="fcard-name m">米哈游</div><div class="fcard-sub">原神 · 崩坏 · 绝区零</div></div></div>
+      <div style="font-size:11px;color:var(--text3)">战斗力</div>
+      <div class="power m" id="pw-m">0</div>
+      <div class="pbar"><div class="pbar-fill m" id="pb-m" style="width:0%"></div></div>
+      <div class="pct" id="pc-m">0%</div>
+      <button class="vbtn m" onclick="vote('mhy')">🔥 为米哈游投票</button>
     </div>
   </div>
-  
-  <!-- 鹰角单独卡片 -->
-  <div style="margin-top:20px">
-    <div class="faction-panel hgryph" style="max-width:460px">
-      <div class="faction-header">
-        <div class="faction-avatar h">H</div>
-        <div><div class="faction-name" style="color:var(--hgryph)">鹰角网络</div><div class="faction-sub">明日方舟 · 终末地</div></div>
-      </div>
-      <div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">当前战斗力</div>
-      <div style="font-size:28px;font-weight:900;color:var(--hgryph)" id="power-hgryph">3,195</div>
-      <div class="vote-bar"><div class="vote-bar-fill h" id="vote-bar-hgryph" style="width:20%"></div></div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:6px" id="votes-hgryph">20% 支持</div>
-      <button class="vote-btn h" onclick="vote('hgryph')">🔥 为鹰角投票</button>
-    </div>
+  <div class="fcard h" style="max-width:420px">
+    <div class="fcard-head"><div class="fcard-icon h">H</div><div><div class="fcard-name h">鹰角网络</div><div class="fcard-sub">明日方舟 · 终末地</div></div></div>
+    <div style="font-size:11px;color:var(--text3)">战斗力</div>
+    <div class="power h" id="pw-h">0</div>
+    <div class="pbar"><div class="pbar-fill h" id="pb-h" style="width:0%"></div></div>
+    <div class="pct" id="pc-h">0%</div>
+    <button class="vbtn h" onclick="vote('hgryph')">🔥 为鹰角投票</button>
   </div>
 </section>
 
-<!-- FEED -->
-<section id="feed" class="feed">
-  <div class="section-title">🔥 最新吃瓜</div>
+<section id="feed" class="container" style="margin-top:40px">
+  <div class="sec-head"><h2>🔥 最新吃瓜</h2></div>
+  <div class="filters" id="filters" style="margin-bottom:16px">
+    <button class="fbtn on" data-f="all" onclick="setFilter('all')">全部</button>
+    <button class="fbtn" data-f="kuro" onclick="setFilter('kuro')">库洛</button>
+    <button class="fbtn" data-f="mhy" onclick="setFilter('mhy')">米哈游</button>
+    <button class="fbtn" data-f="hgryph" onclick="setFilter('hgryph')">鹰角</button>
+    <button class="fbtn" data-f="cross" onclick="setFilter('cross')">跨阵营</button>
+    <span style="color:var(--text3);font-size:11px;margin-left:auto" id="feed-count"></span>
+  </div>
   <div class="feed-grid" id="feed-grid">
-    <!-- Cards injected by JS -->
+    <div class="empty"><div class="empty-icon">🍉</div><p>正在加载...</p></div>
   </div>
 </section>
 
-<!-- TRENDING -->
-<section id="trending" class="trending">
-  <div class="section-title">📈 热度榜 TOP 10</div>
-  <div class="trending-list" id="trending-list">
-    <!-- Injected by JS -->
-  </div>
+<section id="trending" class="container" style="margin-top:40px">
+  <div class="sec-head"><h2>📈 热度榜 TOP 10</h2></div>
+  <div class="tlist" id="tlist"><div class="empty"><div class="empty-icon">📊</div><p>加载中...</p></div></div>
 </section>
 
-<!-- SUBMIT -->
-<section id="submit" class="submit-section">
-  <div class="submit-box">
+<section id="submit" class="container" style="margin-top:40px">
+  <div class="sbox">
     <h3>🍉 我来爆料</h3>
-    <div class="form-row">
-      <select id="s-faction">
-        <option value="">选择阵营</option>
-        <option value="kuro">库洛游戏</option>
-        <option value="mhy">米哈游</option>
-        <option value="hgryph">鹰角网络</option>
-        <option value="cross">跨阵营大瓜 🔥</option>
-      </select>
-      <select id="s-type">
-        <option value="">类型</option>
-        <option value="leak">泄露爆料</option>
-        <option value="drama">社区抓马</option>
-        <option value="battle">阵营对抗</option>
-      </select>
+    <div class="srow">
+      <select id="sf"><option value="">选择阵营</option><option value="kuro">库洛游戏</option><option value="mhy">米哈游</option><option value="hgryph">鹰角网络</option><option value="cross">跨阵营大瓜</option></select>
+      <select id="st"><option value="">类型</option><option value="leak">泄露爆料</option><option value="drama">社区抓马</option><option value="battle">阵营对抗</option><option value="hot">热门事件</option></select>
     </div>
-    <div class="form-row">
-      <input id="s-title" placeholder="标题（一句话概括这颗瓜）">
-    </div>
-    <div class="form-row">
-      <textarea id="s-content" placeholder="详细内容……越详细越好，别客气"></textarea>
-    </div>
-    <div class="form-row" style="justify-content:flex-end">
-      <button class="submit-btn" onclick="submitLeak()">🍉 提交爆料</button>
-    </div>
+    <div class="srow"><input id="si" placeholder="标题 — 一句话概括这颗瓜"></div>
+    <div class="srow"><textarea id="sc" placeholder="详细内容…越详细越好"></textarea></div>
+    <div class="srow" style="justify-content:flex-end"><button class="sbtn" onclick="submit()">🍉 提交爆料</button></div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer class="footer">
-  <p>🍉 瓜田守望者 GUA ZONE · 本站内容均来自社区投稿与公开信息 · 仅供娱乐</p>
-  <p style="margin-top:8px">本站不隶属于任何公司 · 吃瓜请理性 · 也可不理性</p>
+  <p>🍉 瓜田守望者 GUA ZONE · 数据来源 Bilibili/NGA/贴吧/微博 · 仅供娱乐</p>
+  <p style="margin-top:4px">不隶属于任何公司 · 吃瓜请理性 · 也可不理性</p>
 </footer>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== DATA =====
-const feeds = [
-  {id:1,faction:'mhy',tag:'leak',title:'绝区零1.4版本新角色泄露！疑似机械师职业登场',excerpt:'知名爆料人Ubatcha放出疑似绝区零1.4版本的内部测试截图，新角色看起来是一个带机械手臂的少女，技能机制涉及时间暂停……',heat:12847,time:'12分钟前',comments:324},
-  {id:2,faction:'kuro',tag:'drama',title:'鸣潮玩家社区炸锅：新深渊机制引发大规模退款潮',excerpt:'鸣潮最新深渊改动移除了部分角色的核心机制，社区评分一夜暴跌至3.2。库洛紧急发公告但玩家并不买账……',heat:9532,time:'28分钟前',comments:567},
-  {id:3,faction:'cross',tag:'battle',title:'三厂春节流水大战：米哈游碾压但库洛增速惊人',excerpt:'SensorTower数据显示春节档米哈游依然霸榜，但库洛凭借鸣潮2.0实现环比增长340%，鹰角则表现平稳……',heat:8291,time:'1小时前',comments:445},
-  {id:4,faction:'hgryph',tag:'leak',title:'明日方舟终末地实机画面疑似流出！风格大变',excerpt:'B站用户上传了一段标注为"鹰角内部测试"的视频，画面风格从2D塔防变成了类似原神的3D动作……',heat:7653,time:'2小时前',comments:289},
-  {id:5,faction:'mhy',tag:'hot',title:'原神6.0须弥终章？疑似纳塔后全新国家线索',excerpt:'数据挖掘者在最新客户端中发现了一张标注为"永恒之国"的地图资源，疑似与提瓦特大陆之外的地区有关……',heat:15892,time:'3小时前',comments:892},
-  {id:6,faction:'kuro',tag:'drama',title:'库洛美术组被曝离职潮：多名核心画师已注销社交账号',excerpt:'据多位知情人士透露，库洛美术部门近期出现大规模人员变动，至少5名参与鸣潮角色设计的画师已确认离职……',heat:11234,time:'4小时前',comments:678},
-  {id:7,faction:'hgryph',tag:'battle',title:'鹰角vs米哈游：二游圈最经典的对立到底从何而来',excerpt:'从"不抽卡也能玩"到"内容为王"的理念之争，两家公司代表的不仅是游戏风格，更是整个二游圈的设计哲学分歧……',heat:6890,time:'5小时前',comments:1234},
-  {id:8,faction:'cross',tag:'drama',title:'跨服互嘲名场面：三厂玩家在NGA的年度大战回顾',excerpt:'2025年最精彩的社区对抗不在游戏里——盘点三厂玩家在NGA、贴吧、B站上演的几次史诗级嘴仗……',heat:5432,time:'6小时前',comments:1567},
-  {id:9,faction:'mhy',tag:'leak',title:'崩坏星穹铁道3.0疑似将开放全新命途体系',excerpt:'多位数据挖掘者独立确认，星铁客户端中出现了全新的命途图标和描述文本，可能会彻底改变现有配队格局……',heat:9987,time:'7小时前',comments:432},
-  {id:10,faction:'kuro',tag:'hot',title:'鸣潮2.0首周流水预估出炉！库洛这次赌对了吗',excerpt:'根据各平台数据综合估算，鸣潮2.0版本首周流水约为上一版本的2.8倍，重返二游收入榜前五……',heat:8765,time:'8小时前',comments:543},
-  {id:11,faction:'hgryph',tag:'leak',title:'鹰角秘密项目曝光：疑似开放世界生存类新游',excerpt:'招聘信息暗示鹰角正在组建一支200人的新团队，岗位描述涉及大世界探索、生存建造和多人联机……',heat:6543,time:'9小时前',comments:321},
-  {id:12,faction:'cross',tag:'battle',title:'玩家自制战斗力排名引发全网争议：谁是真正的二游一哥',excerpt:'一位UP主发布的"二游综合实力评估"视频播放量破百万，评论区已变成三厂粉丝的战场……',heat:13456,time:'10小时前',comments:2345},
-];
+// ===== STATE =====
+let posts = [];
+let currentFilter = 'all';
+let votes = JSON.parse(localStorage.getItem('gz-v') || '{"kuro":3842,"mhy":4251,"hgryph":2035}');
+let voted = localStorage.getItem('gz-voted');
 
-const trending = [
-  {rank:1,title:'绝区零1.4新角色泄露',faction:'mhy',heat:'15.8万'},
-  {rank:2,title:'鸣潮2.0流水暴涨2.8倍',faction:'kuro',heat:'12.3万'},
-  {rank:3,title:'原神6.0"永恒之国"线索',faction:'mhy',heat:'9.9万'},
-  {rank:4,title:'库洛美术组离职潮',faction:'kuro',heat:'8.7万'},
-  {rank:5,title:'终末地实机画面流出',faction:'hgryph',heat:'7.6万'},
-  {rank:6,title:'春节流水三厂对比',faction:'cross',heat:'6.8万'},
-  {rank:7,title:'星铁3.0新命途体系',faction:'mhy',heat:'6.5万'},
-  {rank:8,title:'鹰角秘密200人新项目',faction:'hgryph',heat:'5.4万'},
-  {rank:9,title:'NGA年度嘴仗回顾',faction:'cross',heat:'4.3万'},
-  {rank:10,title:'二游一哥之争引爆全网',faction:'cross',heat:'3.8万'},
-];
+// ===== FACTION MAP =====
+const FN = {kuro:'库洛',mhy:'米哈游',hgryph:'鹰角',cross:'跨阵营'};
+const FC = {kuro:'var(--kuro)',mhy:'var(--mhy)',hgryph:'var(--hgryph)',cross:'#ff5252'};
+const FS = {kuro:'k',mhy:'m',hgryph:'h',cross:'k'};
+const TN = {leak:'⚡ 爆料',drama:'🎭 抓马',battle:'⚔️ 对决',hot:'🔥 热门'};
+
+// ===== LOAD DATA =====
+async function loadData() {
+  const bar = document.getElementById('update-status');
+  bar.textContent = '正在从服务器拉取数据...';
+  bar.className = 'loading';
+
+  try {
+    const resp = await fetch('data/posts.json?' + Date.now());
+    if (!resp.ok) throw new Error(resp.status);
+    const data = await resp.json();
+    posts = data.posts || [];
+    document.getElementById('update-status').textContent = '上次更新: ' + (data.updated_at || '未知') + ' · ' + posts.length + ' 条';
+    bar.className = 'dot';
+  } catch(e) {
+    bar.textContent = '离线模式 — 使用内置数据 · ' + e.message;
+    bar.className = '';
+  }
+
+  renderFeed();
+  renderTrending();
+  updateStats();
+  updateVotes();
+}
+
+// ===== RENDER FEED =====
+function renderFeed() {
+  const grid = document.getElementById('feed-grid');
+  const filtered = currentFilter === 'all' ? posts : posts.filter(p => p.faction === currentFilter);
+  document.getElementById('feed-count').textContent = filtered.length + ' 条';
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty"><div class="empty-icon">🍉</div><p>暂无此阵营的瓜，稍后再来看看</p></div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map((p, i) => `
+    <article class="card" onclick="${p.url ? "window.open('"+p.url+"','_blank')" : ''}">
+      <div class="card-body">
+        <div class="card-tags">
+          <span class="tag ${p.faction}">${FN[p.faction] || p.faction}</span>
+          <span class="tag ${p.tag}">${TN[p.tag] || '📌 资讯'}</span>
+          <span class="card-source">${p.source || '?'}</span>
+        </div>
+        <div class="card-title">${esc(p.title)}</div>
+        ${p.excerpt ? '<div class="card-excerpt">'+esc(p.excerpt)+'</div>' : ''}
+        <div class="card-foot">
+          <div>
+            ${p.heat ? '<span>🔥 '+formatNum(p.heat)+'</span>' : ''}
+            ${p.comments ? '<span>💬 '+p.comments+'</span>' : ''}
+          </div>
+          <span>${p.time || timeAgo(i)}</span>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderTrending() {
+  const list = document.getElementById('tlist');
+  const sorted = [...posts].sort((a,b) => (b.heat||0) - (a.heat||0)).slice(0, 10);
+  if (!sorted.length) { list.innerHTML = '<div class="empty"><div class="empty-icon">📊</div><p>暂无数据</p></div>'; return; }
+
+  list.innerHTML = sorted.map((p, i) => `
+    <div class="titem" onclick="${p.url ? "window.open('"+p.url+"','_blank')" : ''}" style="cursor:pointer">
+      <div class="trank ${i<3?'top':''}" style="color:${i>=3?FC[p.faction]:''}">${i+1}</div>
+      <div class="tbody">
+        <div class="ttitle">${esc(p.title)}</div>
+        <div class="tmeta">${FN[p.faction]||'?'} · ${p.source||'?'}</div>
+      </div>
+      <div class="theat" style="color:${FC[p.faction]}">${p.heat ? '🔥'+formatNum(p.heat) : ''}</div>
+    </div>
+  `).join('');
+}
+
+// ===== STATS =====
+function updateStats() {
+  const factions = {kuro:0,mhy:0,hgryph:0};
+  posts.forEach(p => { if (factions.hasOwnProperty(p.faction)) factions[p.faction]++; });
+  animNum('stat-kuro', factions.kuro + 2847);
+  animNum('stat-mhy', factions.mhy + 4521);
+  animNum('stat-hgryph', factions.hgryph + 3195);
+  animNum('stat-total', posts.length);
+}
+
+function animNum(id, target) {
+  const el = document.getElementById(id);
+  const dur = 1200;
+  const start = performance.now();
+  const from = 0;
+  (function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.floor(from + (target - from) * ease).toLocaleString();
+    if (p < 1) requestAnimationFrame(tick);
+  })(start);
+}
 
 // ===== VOTES =====
-let votes = JSON.parse(localStorage.getItem('gz-votes') || '{"kuro":3842,"mhy":4251,"hgryph":2035}');
-let voted = localStorage.getItem('gz-voted') || null;
-
-function updateVoteUI() {
-  const total = votes.kuro + votes.mhy + votes.hgryph;
-  const pk = (votes.kuro/total*100).toFixed(1);
-  const pm = (votes.mhy/total*100).toFixed(1);
-  const ph = (votes.hgryph/total*100).toFixed(1);
-  
-  document.getElementById('vote-bar-kuro').style.width = pk+'%';
-  document.getElementById('vote-bar-mhy').style.width = pm+'%';
-  document.getElementById('vote-bar-hgryph').style.width = ph+'%';
-  document.getElementById('votes-kuro').textContent = pk+'% 支持';
-  document.getElementById('votes-mhy').textContent = pm+'% 支持';
-  document.getElementById('votes-hgryph').textContent = ph+'% 支持';
-  
-  document.getElementById('power-kuro').textContent = (2800+votes.kuro/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
-  document.getElementById('power-mhy').textContent = (4500+votes.mhy/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
-  document.getElementById('power-hgryph').textContent = (3100+votes.hgryph/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+function updateVotes() {
+  const t = votes.kuro + votes.mhy + votes.hgryph;
+  const pk = (votes.kuro/t*100).toFixed(1);
+  const pm = (votes.mhy/t*100).toFixed(1);
+  const ph = (votes.hgryph/t*100).toFixed(1);
+  document.getElementById('pb-k').style.width = pk+'%';
+  document.getElementById('pb-m').style.width = pm+'%';
+  document.getElementById('pb-h').style.width = ph+'%';
+  document.getElementById('pc-k').textContent = pk+'% 支持';
+  document.getElementById('pc-m').textContent = pm+'% 支持';
+  document.getElementById('pc-h').textContent = ph+'% 支持';
+  document.getElementById('pw-k').textContent = (2800+votes.kuro/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  document.getElementById('pw-m').textContent = (4500+votes.mhy/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  document.getElementById('pw-h').textContent = (3100+votes.hgryph/10).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  document.getElementById('round').textContent = (2347 + Math.floor(t/100));
 }
 
-function vote(faction) {
-  if (voted) return showToast('你已经投过票了，一人一票制！');
-  votes[faction] = (votes[faction] || 0) + 1;
-  voted = faction;
-  localStorage.setItem('gz-votes', JSON.stringify(votes));
-  localStorage.setItem('gz-voted', faction);
-  updateVoteUI();
-  const names = {kuro:'库洛',mhy:'米哈游',hgryph:'鹰角'};
-  showToast('🎉 你为'+names[faction]+'投了一票！');
+function vote(f) {
+  if (voted) return toast('你已经投过票了！');
+  votes[f]++;
+  voted = f;
+  localStorage.setItem('gz-v', JSON.stringify(votes));
+  localStorage.setItem('gz-voted', f);
+  updateVotes();
+  toast('🎉 你为' + FN[f] + '投了一票！');
 }
 
-// ===== FEED RENDER =====
-function renderFeed(filter='all') {
-  const grid = document.getElementById('feed-grid');
-  const filtered = filter === 'all' ? feeds : feeds.filter(f => f.faction === filter);
-  grid.innerHTML = filtered.map(f => {
-    const tagClass = f.faction === 'cross' ? 'battle' : f.faction;
-    const tagText = {leak:'⚡ 爆料',drama:'🎭 抓马',battle:'⚔️ 对决',hot:'🔥 热门'}[f.tag];
-    const factionTag = {kuro:'库洛',mhy:'米哈游',hgryph:'鹰角',cross:'跨阵营'}[f.faction];
-    return `
-      <article class="feed-card fade-in" data-faction="${f.faction}">
-        <div class="card-body">
-          <div class="card-header">
-            <span class="card-tag ${tagClass}">${factionTag}</span>
-            <span class="card-tag ${f.tag}">${tagText}</span>
-          </div>
-          <div class="card-title">${f.title}</div>
-          <div class="card-excerpt">${f.excerpt}</div>
-          <div class="card-meta">
-            <div class="card-meta-left">
-              <span class="card-meta-item">🔥 ${f.heat.toLocaleString()}</span>
-              <span class="card-meta-item">💬 ${f.comments}</span>
-            </div>
-            <span>${f.time}</span>
-          </div>
-        </div>
-      </article>`;
-  }).join('');
-  setTimeout(() => document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible')), 50);
-}
-
-function filterCards(faction) {
-  document.querySelectorAll('.filter-btn').forEach(b => {
-    b.className = 'filter-btn';
-    if ((faction === 'all' && !b.dataset.faction) || b.dataset.faction === faction) {
-      b.classList.add(faction === 'all' ? 'active-all' : 'active-'+faction);
-    }
+// ===== FILTERS =====
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.fbtn').forEach(b => {
+    b.classList.toggle('on', b.dataset.f === f);
   });
-  renderFeed(faction);
-}
-
-// ===== TRENDING RENDER =====
-function renderTrending() {
-  document.getElementById('trending-list').innerHTML = trending.map(t => {
-    const colors = {kuro:'var(--kuro)',mhy:'var(--mhy)',hgryph:'var(--hgryph)',cross:'var(--text)'};
-    return `
-      <div class="trending-item">
-        <div class="trending-rank ${t.rank<=3?'top':''}" style="color:${t.rank<=3?'':colors[t.faction]}">${t.rank}</div>
-        <div class="trending-content">
-          <div class="trending-title">${t.title}</div>
-          <div class="trending-desc">${{kuro:'库洛游戏',mhy:'米哈游',hgryph:'鹰角网络',cross:'跨阵营'}[t.faction]}</div>
-        </div>
-        <div class="trending-heat" style="color:${colors[t.faction]}">🔥 ${t.heat}</div>
-      </div>`;
-  }).join('');
+  renderFeed();
 }
 
 // ===== SUBMIT =====
-function submitLeak() {
-  const f = document.getElementById('s-faction').value;
-  const t = document.getElementById('s-type').value;
-  const title = document.getElementById('s-title').value.trim();
-  const content = document.getElementById('s-content').value.trim();
-  if (!f||!t||!title||!content) return showToast('⚠️ 请填写完整信息');
-  showToast('🍉 爆料已提交！审核后上架，感谢你的贡献！');
-  document.getElementById('s-title').value='';
-  document.getElementById('s-content').value='';
-  document.getElementById('s-faction').value='';
-  document.getElementById('s-type').value='';
+function submit() {
+  const f = document.getElementById('sf').value;
+  const t = document.getElementById('st').value;
+  const title = document.getElementById('si').value.trim();
+  const content = document.getElementById('sc').value.trim();
+  if (!f||!t||!title) return toast('⚠️ 请填写完整信息');
+  // Save locally for now
+  const userPosts = JSON.parse(localStorage.getItem('gz-user-posts') || '[]');
+  userPosts.unshift({faction:f,tag:t,title,excerpt:content,source:'用户投稿',heat:0,time:'刚刚'});
+  localStorage.setItem('gz-user-posts', JSON.stringify(userPosts));
+  posts = [...userPosts, ...posts];
+  renderFeed();
+  toast('🍉 爆料已提交！感谢贡献！');
+  document.getElementById('si').value = '';
+  document.getElementById('sc').value = '';
+  document.getElementById('sf').value = '';
+  document.getElementById('st').value = '';
 }
 
-// ===== TOAST =====
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-// ===== COUNTER ANIMATION =====
-function animateCounter(el, target, duration=1500) {
-  const start = performance.now();
-  const initial = 0;
-  function update(now) {
-    const p = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.floor(initial + (target - initial) * ease).toLocaleString();
-    if (p < 1) requestAnimationFrame(update);
-  }
-  requestAnimationFrame(update);
-}
+// ===== UTILS =====
+function esc(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function formatNum(n) { return n>=10000 ? (n/10000).toFixed(1)+'万' : n.toLocaleString(); }
+function timeAgo(i) { const mins = i*3+5; return mins<60 ? mins+'分钟前' : Math.floor(mins/60)+'小时前'; }
+function toast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-  renderFeed();
-  renderTrending();
-  updateVoteUI();
-  animateCounter(document.getElementById('stat-kuro'), 2847);
-  animateCounter(document.getElementById('stat-mhy'), 4521);
-  animateCounter(document.getElementById('stat-hgryph'), 3195);
-  animateCounter(document.getElementById('stat-total'), 127);
-});
-
-// Intersection Observer for fade-in
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
+document.addEventListener('DOMContentLoaded', loadData);
 </script>
 </body>
 </html>
